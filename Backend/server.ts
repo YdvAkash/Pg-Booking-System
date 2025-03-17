@@ -1,22 +1,31 @@
 import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
-// import cors from "cors";
-import connectDB from "./config/db";
+import mongoose from "mongoose";
+import authRoutes from "./routes/auth.routes";
 import pgRoutes from "./routes/pg.routes";
+import bookingRoutes from "./routes/booking.routes";
+import roommateRoutes from "./routes/auth.routes";
 
-// dotenv.config();
+dotenv.config();
 const app = express();
 
-// Middleware
+app.use(cors());
 app.use(express.json());
-// app.use(cors());
-app.get("/", (req, res) => {
-  res.send("Server is running!");
-});
-// Routes
-app.use("/api/pgs", pgRoutes);
 
-// Start Server
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/pgs", pgRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/roommates", roommateRoutes);
+
+// Connect to MongoDB
+mongoose
+  .connect(process.env.MONGO_URI as string)
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.error(err));
+
 const PORT = process.env.PORT || 5000;
-connectDB();
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

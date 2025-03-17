@@ -1,9 +1,10 @@
 import express from "express";
-import { createPG, getPGs } from "../controllers/pg.controller";
+import { createPG, getAllPGs, getPGById } from "../controllers/pg.controller";
 
 const router = express.Router();
 
-router.post("/", createPG);
-router.get("/", getPGs);
+router.post("/create", createPG);
+router.get("/all", getAllPGs);
+// router.get("/:pgId", getPGById);
 
 export default router;
